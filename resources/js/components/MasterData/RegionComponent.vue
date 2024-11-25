@@ -206,9 +206,20 @@ export default {
                         text: response.data.message,
                         type: "success",
                         timer: 3000,
-                    });
+                    })
+                   
                     this.show();
-                })
+                }).catch((error) => {
+                    if (error.response.status = 500){
+                        this.$fire({
+                        title: "Error",
+                        text: "Internal Server Error",
+                        type: "warning",
+                        timer: 3000,
+                    })
+                    }
+                    
+                });
             }
         }
     },

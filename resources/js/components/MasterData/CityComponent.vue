@@ -67,14 +67,20 @@
                                     id="province_id"
                                     class="form-control"
                                     v-model="province_id"
+                                    :class="{
+                                        'border border-danger': errors.province_id,
+                                    }"
                                 >
-                                    <option
+                                    <option 
                                         v-for="province in provinces"
                                         :value="province.id"
                                     >
                                         {{ province.name }}
                                     </option>
                                 </select>
+                                <p class="text-danger" v-if="errors.province_id">
+                                    {{ errors.province_id[0] }}
+                                </p>
 
                                 <label for="name">City:</label>
                                 <input
@@ -165,6 +171,7 @@ export default {
             $("#create-city").modal("show");
         },
         closeModal() {
+            this.init();
             $("#create-city").modal("hide");
         },
         store() {
@@ -194,11 +201,13 @@ export default {
             });
         },
         editData(data) {
-            axios.get('city/edit/'+ id).then(response=>{
-                this.isEditData = true;
-                this.id = data.row.id;
-                this.region_id = data.row.region_id;
-                this.province_id = data.row.province_id;
+            console.log(data)
+            this.isEditData = true;
+            this.id = data.row.id;
+            axios.get('city/edit/'+ this.id).then(response=>{
+                this.region_id = response.data.data.province.region.id;
+                this.getProvincesByRegion(this.region_id);
+                this.province_id = response.data.data.province_id;
                 this.name = data.row.name;
             });
             console.log(data.row);

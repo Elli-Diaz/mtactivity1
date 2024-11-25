@@ -50,7 +50,7 @@ class CityController extends Controller
     }
 
     public function edit($id){
-        $data = City::where('id', $id)->first();
+        $data = City::with(['Province.Region'])->where('id', $id)->first();
         return response()->json([
             'data' => $data
         ]);
@@ -58,11 +58,11 @@ class CityController extends Controller
 
     public function update(Request $request, $id){
         $request->validate([
-            'name' => 'required|max:100',
+            'name' => 'required|max:100|unique:cities,name,' .$id,
             'province_id' => 'required',
         ], [], [
-            'name' => 'City',
-            'province_id' => 'Region',
+            'name' => 'City Name',
+            'province_id' => 'Province',
         ]);
 
         $data = City::where('id', $id)->first();
