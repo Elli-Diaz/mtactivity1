@@ -5450,6 +5450,7 @@ __webpack_require__.r(__webpack_exports__);
       $("#create-city").modal("show");
     },
     closeModal: function closeModal() {
+      this.init();
       $("#create-city").modal("hide");
     },
     store: function store() {
@@ -5479,11 +5480,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     editData: function editData(data) {
       var _this4 = this;
-      axios.get('city/edit/' + id).then(function (response) {
-        _this4.isEditData = true;
-        _this4.id = data.row.id;
-        _this4.region_id = data.row.region_id;
-        _this4.province_id = data.row.province_id;
+      console.log(data);
+      this.isEditData = true;
+      this.id = data.row.id;
+      axios.get('city/edit/' + this.id).then(function (response) {
+        _this4.region_id = response.data.data.province.region.id;
+        _this4.getProvincesByRegion(_this4.region_id);
+        _this4.province_id = response.data.data.province_id;
         _this4.name = data.row.name;
       });
       console.log(data.row);
@@ -5769,6 +5772,15 @@ __webpack_require__.r(__webpack_exports__);
             timer: 3000
           });
           _this4.show();
+        })["catch"](function (error) {
+          if (error.response.status = 500) {
+            _this4.$fire({
+              title: "Error",
+              text: "Internal Server Error",
+              type: "warning",
+              timer: 3000
+            });
+          }
         });
       }
     }
@@ -6509,6 +6521,9 @@ var render = function render() {
       expression: "province_id"
     }],
     staticClass: "form-control",
+    "class": {
+      "border border-danger": _vm.errors.province_id
+    },
     attrs: {
       id: "province_id"
     },
@@ -6529,7 +6544,9 @@ var render = function render() {
         value: province.id
       }
     }, [_vm._v("\n                                    " + _vm._s(province.name) + "\n                                ")]);
-  }), 0), _vm._v(" "), _c("label", {
+  }), 0), _vm._v(" "), _vm.errors.province_id ? _c("p", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                " + _vm._s(_vm.errors.province_id[0]) + "\n                            ")]) : _vm._e(), _vm._v(" "), _c("label", {
     attrs: {
       "for": "name"
     }

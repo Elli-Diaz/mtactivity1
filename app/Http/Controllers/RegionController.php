@@ -48,7 +48,7 @@ class RegionController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:regions,name,' .$id,
         ], [], [
             'name' => 'Region',
         ]);

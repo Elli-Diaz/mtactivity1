@@ -50,7 +50,7 @@ class ProvinceController extends Controller
     }
     public function update(Request $request, $id){
         $request->validate([
-            'name' => 'required|max:100',
+            'name' => 'required|max:100|unique:provinces,name,' .$id,
             'region_id' => 'required',
         ], [], [
             'name' => 'Province',
