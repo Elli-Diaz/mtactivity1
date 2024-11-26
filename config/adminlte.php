@@ -346,13 +346,26 @@ return [
                     ],
                 ],
                 [
-                    'text' => 'Department',
+                    'text' => 'Sample',
                     'url' => '#',
                 ],
                 [
                     'text' => 'Employee',
                     'url' => '#',
                 ],
+                [
+                    'text' => 'Companies',
+                    'url' => 'company',
+                ],
+                [
+                    'text' => 'Departments',
+                    'url' => 'department',
+                ],
+                [
+                    'text' => 'Users',
+                    'url' => 'user',
+                ],
+                
             ],
         ],
 

@@ -79,6 +79,11 @@ Vue.component(
     require("./components/MasterData/CityComponent.vue").default
 );
 
+Vue.component(
+    "company-component",
+    require("./components/MasterData/CompanyComponent.vue").default
+);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
