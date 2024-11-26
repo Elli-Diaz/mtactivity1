@@ -7,17 +7,17 @@
                         <a class="breadcrumb-link" href="/">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        Company
+                        Department
                     </li>
                 </ol>
             </nav>
         </div>
         <div class="card p-4">
-            <h3>Companies</h3>
+            <h3>Departments</h3>
             <div class="row">
                 <div class="col-md-12 mb-2">
                     <button class="btn btn-primary" v-on:click="showModal">
-                        + Create New Company
+                        + Create New Department
                     </button>
                 </div>
             </div>
@@ -33,29 +33,53 @@
                     >
                         Edit
                     </button>
-                    <button class="btn btn-danger" v-on:click="destroyData(row)">Delete</button>
+                    <button
+                        class="btn btn-danger"
+                        v-on:click="destroyData(row)"
+                    >
+                        Delete
+                    </button>
                 </template>
             </v-client-table>
 
-            <!-- Modal: -->
-            <div class="modal" id="create-company">
+            <div class="modal" id="create-department">
                 <div class="modal-dialog modal-dialog-centered bd-example">
                     <div class="modal-content">
-                        <div class="text-center modal-header">
+                        <div class="modal-header">
                             <p v-if="isEditData == false" class="modal-title">
-                                Create Company
+                                Create Department
                             </p>
-
-                            <p v-else class="modal-title">Edit Company</p>
+                            <p v-else class="modal-title">Edit Department</p>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="name">Company Name:</label>
+                                <label for="company_id">Company:</label>
+                                <select
+                                    id="company_id"
+                                    class="form-control"
+                                    v-model="company_id"
+                                    :class="{
+                                        'border border-danger':
+                                            errors.company_id,
+                                    }"
+                                >
+                                    <option
+                                        v-for="company in company"
+                                        :value="company.company_id"
+                                    >
+                                        {{ company.name }}
+                                    </option>
+                                </select>
+                                <p class="text-danger" v-if="errors.company_id">
+                                    {{ errors.company_id[0] }}
+                                </p>
+
+                                <label for="name">Department:</label>
                                 <input
                                     type="text"
                                     class="form-control"
                                     v-model="name"
-                                    placeholder="Input company name here"
+                                    placeholder="Input Department name here"
                                     :class="{
                                         'border border-danger': errors.name,
                                     }"
@@ -63,31 +87,19 @@
                                 <p class="text-danger" v-if="errors.name">
                                     {{ errors.name[0] }}
                                 </p>
-                                <label for="address">Company Address:</label>
+
+                                <label for="name">Budget:</label>
                                 <input
-                                    type="text"
+                                    type="number"
                                     class="form-control"
-                                    v-model="address"
-                                    placeholder="Input company address here"
+                                    v-model="budget"
+                                    placeholder="Input Department's Budget here"
                                     :class="{
-                                        'border border-danger': errors.address,
+                                        'border border-danger': errors.budget,
                                     }"
                                 />
-                                <p class="text-danger" v-if="errors.address">
-                                    {{ errors.address[0] }}
-                                </p>
-                                <label for="established_date">Company Established Date:</label>
-                                <input
-                                    type="date"
-                                    class="form-control"
-                                    v-model="established_date"
-                                    placeholder="Input company established date here"
-                                    :class="{
-                                        'border border-danger': errors.established_date,
-                                    }"
-                                />
-                                <p class="text-danger" v-if="errors.established_date">
-                                    {{ errors.established_date[0] }}
+                                <p class="text-danger" v-if="errors.budget">
+                                    {{ errors.budget[0] }}
                                 </p>
                             </div>
                         </div>
@@ -130,64 +142,75 @@
 <script>
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
-// import TestComponent from "../TestComponent.vue";
 export default {
     components: {
         Loading,
     },
+    props: ["company"],
     data() {
         return {
-            name: "",
-            address: "",
-            established_date: "",
+            department_id: "",
             company_id: "",
+            name: "",
+            budget: "",
+            creation_date: "",
             errors: "",
             isEditData: false,
             isLoading: false,
             fullPage: true,
             dataTable: [],
-            columns: ["company_id", "name", "address", "established_date", "actions"],
+            columns: [
+                "department_id",
+                "company_name",
+                "name",
+                "budget",
+                "creation_date",
+                "actions",
+            ],
             options: {
                 headings: {
-                    company_id: "ID",
-                    name: "Company Name",
-                    address: "Company Address",
-                    established_date: "Company Established Date",
+                    department_id: "ID",
+                    company_name: "Company Name",
+                    name: "Department Name",
+                    budget: "Budget",
+                    creation_date: "Creation Date",
                     actions: "Actions",
                 },
                 filterable: true,
-                sortable: ["company_id", "name"],
+                sortable: ["department_id", "name"],
             },
         };
     },
     methods: {
         init() {
-            this.name = "";
-            this.address = "";
-            this.established_date = "";
+            (this.company_id = ""), (this.name = "");
+            this.budget = "";
+            this.creation_date = "";
             this.errors = [];
         },
         show() {
-            axios.get("company/show").then((response) => {
+            axios.get("department/show").then((response) => {
+                console.log(response);
                 this.dataTable = response.data.data;
             });
         },
         showModal() {
             this.isEditData = false;
             this.init();
-            $("#create-company").modal("show");
+            $("#create-department").modal("show");
         },
         closeModal() {
-            $("#create-company").modal("hide");
+            $("#create-department").modal("hide");
             this.init();
         },
         store() {
             this.isLoading = true;
             axios
-                .post("company/store", {
+                .post("department/store", {
+                    company_id: this.company_id,
                     name: this.name,
-                    address: this.address,
-                    established_date: this.established_date,
+                    budget: this.budget,
+                    creation_date: this.creation_date,
                 })
                 .then((response) => {
                     this.$fire({
@@ -201,27 +224,27 @@ export default {
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors;
-                    console.log(this.errors.name);
-                })
-                .finally(() => {
+                }).finally(() => {
                     this.isLoading = false;
                 });
         },
         editData(data) {
             this.isEditData = true;
+            this.department_id = data.row.department_id;
             this.company_id = data.row.company_id;
             this.name = data.row.name;
-            this.address = data.row.address;
-            this.established_date = data.row.established_date;
-            $("#create-company").modal("show");
+            this.budget = data.row.budget;
+            
+            $("#create-department").modal("show");
         },
         updateData() {
             this.isLoading = true;
-            axios.put("/company/update/" + this.company_id, {
-                name: this.name,
-                address: this.address,
-                established_date: this.established_date,
-            })
+            axios
+                .put("/department/update/" + this.department_id, {
+                    company_id: this.company_id,
+                    name: this.name,
+                    budget: this.budget,
+                })
                 .then((response) => {
                     this.$fire({
                         title: "Success",
@@ -238,59 +261,25 @@ export default {
                 }).finally(() => {
                     this.isLoading = false;
                 });
-                
         },
-        destroyData(data){
-            if(confirm('Are you sure you want to delete this data?')){
-                axios.get('company/destroy/' + data.row.company_id
-            ).then((response) => {
-                    this.$fire({
-                        title: "Success",
-                        text: response.data.message,
-                        type: "success",
-                        timer: 3000,
-                    })
-                   
-                    this.show();
-                }).catch((error) => {
-                    if (error.response.status = 500){
+        destroyData(data) {
+            if (confirm("Are you sure you want to delete this data?")) {
+                axios
+                    .get("department/destroy/" + data.row.department_id)
+                    .then((response) => {
                         this.$fire({
-                        title: "Error",
-                        text: "Internal Server Error",
-                        type: "warning",
-                        timer: 3000,
-                    })
-                    }
-                    
-                });
+                            title: "Success",
+                            text: response.data.message,
+                            type: "success",
+                            timer: 3000,
+                        });
+                        this.show();
+                    });
             }
-        }
+        },
     },
     mounted() {
         this.show();
-        this.init();
     },
 };
 </script>
-<style>
-.breadcrumb {
-    background-color: #f4f6f9;
-}
-.breadcrumb-link {
-    color: #000;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.breadcrumb-item.active {
-    color: #28a745;
-    font-weight: bold;
-}
-.modal-header {
-    font-weight: bold;
-    font-size: 24px;
-    background-color: #28a745;
-    color: #ffffff;
-    padding: 10px 0px 0px 10px;
-}
-</style>

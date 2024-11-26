@@ -84,6 +84,11 @@ Vue.component(
     require("./components/MasterData/CompanyComponent.vue").default
 );
 
+Vue.component(
+    "department-component",
+    require("./components/MasterData/DepartmentComponent.vue").default
+);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

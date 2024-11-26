@@ -10,6 +10,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\AssetGroupController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,5 +100,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit/{id}', [CompanyController::class, 'edit']);
         Route::put('/update/{id}', [CompanyController::class, 'update']);
         Route::get('/destroy/{id}', [CompanyController::class, 'destroy']);
+    });
+
+    Route::prefix('department')->group(function(){
+        Route::get('', [DepartmentController::class, 'index']);
+        Route::get('/show', [DepartmentController::class, 'show']);
+        Route::post('/store', [DepartmentController::class, 'store']);
+        Route::get('/edit/{id}', [DepartmentController::class, 'edit']);
+        Route::put('/update/{id}', [DepartmentController::class, 'update']);
+        Route::get('/destroy/{id}', [DepartmentController::class, 'destroy']);
     });
 });
