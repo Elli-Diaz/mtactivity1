@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RegionController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\AssetGroupController;
 use App\Http\Controllers\AssignmentController;
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\ProvinceController;
-use App\Http\Controllers\RegionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,12 +83,21 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Route for City:
     Route::prefix('city')->group(function () {
-        route::get('', [CityController::class, 'index']);
+        Route::get('', [CityController::class, 'index']);
         Route::get('/show', [CityController::class, 'show']);
         Route::post('/store', [CityController::class, 'store']);
         Route::get('/edit/{id}', [CityController::class, 'edit']);
         Route::put('update/{id}', [CityController::class, 'update']);
         Route::get('destroy/{id}', [CityController::class, 'destroy']);
         Route::get('getProvincesByRegion/{id}', [CityController::class, 'getProvincesByRegion']);
+    });
+
+    Route::prefix('company')->group(function(){
+        Route::get('', [CompanyController::class, 'index']);
+        Route::get('/show', [CompanyController::class, 'show']);
+        Route::post('/store', [CompanyController::class, 'store']);
+        Route::get('/edit/{id}', [CompanyController::class, 'edit']);
+        Route::put('/update/{id}', [CompanyController::class, 'update']);
+        Route::get('/destroy/{id}', [CompanyController::class, 'destroy']);
     });
 });
