@@ -201,7 +201,6 @@ export default {
             });
         },
         editData(data) {
-            console.log(data)
             this.isEditData = true;
             this.id = data.row.id;
             axios.get('city/edit/'+ this.id).then(response=>{
@@ -210,7 +209,6 @@ export default {
                 this.province_id = response.data.data.province_id;
                 this.name = data.row.name;
             });
-            console.log(data.row);
             $("#create-city").modal("show");
         },
         updateData() {

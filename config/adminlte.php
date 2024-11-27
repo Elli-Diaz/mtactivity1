@@ -305,7 +305,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'User Management',
-                    'url' => 'users',
+                    'url' => 'user',
                 ],
                 [
                     'text' => 'Asset',
@@ -363,7 +363,7 @@ return [
                 ],
                 [
                     'text' => 'Users',
-                    'url' => 'user',
+                    'url' => 'employee',
                 ],
                 
             ],

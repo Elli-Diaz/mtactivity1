@@ -11,6 +11,7 @@ use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\AssetGroupController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\EmployeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,14 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
         return view('home');
     });
 
-    Route::prefix('users')->group(function () {
-        Route::get('', [UserController::class, 'index']);
-        Route::get('/getRecords', [UserController::class, 'getRecords']);
-        Route::post('/store', [UserController::class, 'store']);
-        Route::get('/users/edit/{id}', [UserController::class, 'edit']);
-        Route::post('/update', [UserController::class, 'update']);
-        Route::get('/destroy/{id}', [UserController::class, 'destroy']);
-    });
+    
 
     Route::prefix('asset_group')->group(function () {
         Route::get('', [AssetGroupController::class, 'index']);
@@ -110,4 +104,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/update/{id}', [DepartmentController::class, 'update']);
         Route::get('/destroy/{id}', [DepartmentController::class, 'destroy']);
     });
+
+    Route::prefix('employee')->group(function () {
+        Route::get('', [EmployeeController::class, 'index']);
+        Route::get('/show', [EmployeeController::class, 'show']);
+        Route::post('/store', [EmployeeController::class, 'store']);
+        Route::get('/edit/{id}', [EmployeeController::class, 'edit']);
+        Route::put('update/{id}', [EmployeeController::class, 'update']);
+        Route::get('destroy/{id}', [EmployeeController::class, 'destroy']);
+        Route::get('getDepartmentsByCompany/{id}', [EmployeeController::class, 'getDepartmentsByCompany']);
+    });
+
 });

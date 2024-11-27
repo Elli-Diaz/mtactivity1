@@ -213,7 +213,17 @@ export default {
                     creation_date: this.creation_date,
                 })
                 .then((response) => {
-                    this.$fire({
+                    let if_existing = response.data.if_existing;
+                    if(if_existing) {
+                        this.$fire({
+                            title: "Error",
+                            text: 'Department Name Already Exists for this Company',
+                            type: "error",
+                            timer: 3000,
+                        });
+                    }
+                    else if(!response.data.if_existing){
+                        this.$fire({
                         title: "Success",
                         text: response.data.message,
                         type: "success",
@@ -221,6 +231,8 @@ export default {
                     });
                     this.show();
                     this.closeModal();
+                    }
+                    
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors;
@@ -246,7 +258,17 @@ export default {
                     budget: this.budget,
                 })
                 .then((response) => {
-                    this.$fire({
+                    let if_existing = response.data.if_existing;
+                    if(if_existing) {
+                        this.$fire({
+                            title: "Error",
+                            text: 'Department Name Already Exists for this Company',
+                            type: "error",
+                            timer: 3000,
+                        });
+                    }
+                    else if(!response.data.if_existing){
+                        this.$fire({
                         title: "Success",
                         text: response.data.message,
                         type: "success",
@@ -254,10 +276,11 @@ export default {
                     });
                     this.show();
                     this.closeModal();
+                    }
+                    
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors;
-                    console.log(this.errors.name);
                 }).finally(() => {
                     this.isLoading = false;
                 });

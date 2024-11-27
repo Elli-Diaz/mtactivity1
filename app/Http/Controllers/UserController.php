@@ -21,7 +21,7 @@ class UserController extends Controller
         
     }
 
-    public function getRecords() {
+    public function getrecords() {
         $users = User::get();
 
         return response()->json(['user' => $users],
