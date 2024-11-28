@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
-    public function index(){
+    public function index()
+    {
 
         $companies = Company::get();
         return view('admin.masterdata.employees', compact('companies'));
@@ -17,16 +18,13 @@ class EmployeeController extends Controller
     public function show()
     {
         $employees = Employee::all()
-        ->map(function($item){
-            $department_name = Department::where('department_id', $item->department_id)->first();
-            $company_name = Company::where('company_id', $item->company_id)->first();
-            $item->department_name = $department_name->name;
-            $item->company_name = $company_name->name;
-            // $item->department_name = $item->Department->name;
-            // $item->company_id = $item->Department->Company->company_id;
-            // $item->company_name = $item->Department->Company->name;
-            return $item; 
-        });
+            ->map(function ($item) {
+                $department_name = Department::where('department_id', $item->department_id)->first();
+                $company_name = Company::where('company_id', $item->company_id)->first();
+                $item->department_name = $department_name->name;
+                $item->company_name = $company_name->name;
+                return $item;
+            });
         return response()->json([
             'data' => $employees,
         ]);
@@ -35,14 +33,14 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'department_id' => 'required',
-            'company_id' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
-            'phone_number' => 'required',
-            'job_title' => 'required',
-            'hire_date' => 'required',
+            'department_id' => 'required|exists:departments,department_id',
+            'company_id' => 'required|exists:companies,company_id',
+            'first_name' => 'required|string|min:2|max:100',
+            'last_name' => 'required|string|min:2|max:100',
+            'email' => 'required|email|unique:employees,email',
+            'phone_number' => 'required|unique:employees,phone_number',
+            'job_title' => 'required|string|min:2|max:100',
+            'hire_date' => 'required|date|before_or_equal:today',
         ], [], [
             'department_id' => 'Department Name',
             'company_id' => 'Company Name',
@@ -65,31 +63,32 @@ class EmployeeController extends Controller
         $data->save();
     }
 
-    public function getDepartmentsByCompany($id){
-
-        
+    public function getDepartmentsByCompany($id)
+    {
         return response()->json([
             'department' => Department::where('company_id', $id)->get()
         ]);
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $data = Employee::with(['Department.Company'])->where('id', $id)->first();
         return response()->json([
             'data' => $data
         ]);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $request->validate([
-            'department_id' => 'required',
-            'company_id' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required',
-            'phone_number' => 'required',
-            'job_title' => 'required',
-            'hire_date' => 'required',
+            'department_id' => 'required|exists:departments,department_id',
+            'company_id' => 'required|exists:companies,company_id',
+            'first_name' => 'required|string|min:2|max:100',
+            'last_name' => 'required|string|min:2|max:100',
+            'email' => 'required|email|unique:employees,email,' .$id,
+            'phone_number' => 'required|unique:employees,phone_number,' .$id,
+            'job_title' => 'required|string|min:2|max:100',
+            'hire_date' => 'required|date|before_or_equal:today',
         ], [], [
             'department_id' => 'Department Name',
             'company_id' => 'Company Name',
@@ -116,7 +115,8 @@ class EmployeeController extends Controller
             'message' => 'User Successfully Updated!'
         ]);
     }
-    public function destroy($id){
+    public function destroy($id)
+    {
         $data = Employee::where('id', $id);
         $data->delete();
 

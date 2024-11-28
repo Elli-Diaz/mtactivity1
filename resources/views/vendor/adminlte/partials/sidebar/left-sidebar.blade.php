@@ -1,12 +1,8 @@
 <aside class="main-sidebar {{ config('adminlte.classes_sidebar') }}">
 
     {{-- Sidebar brand logo --}}
-    @if(config('adminlte.logo_img_xl'))
-    @include('adminlte::partials.common.brand-logo-xl')
-    @else
-    @include('adminlte::partials.common.brand-logo-xs')
-    @endif
-
+    <img class="sidebar_img container-fluid d-flex justify-content-center mb-3" src="Images/green_apple_logo.png">
+    <hr class="d-flex justify-content-center mb-3">
     {{-- Sidebar menu --}}
     <div class="sidebar">
         <nav class="pt-2">
@@ -28,7 +24,7 @@
 <style>
     /* Change sidebar background color */
     .main-sidebar {
-        background-color: #28a745;
+        background-color: #ffffff;
         /* Green background */
     }
 
@@ -46,6 +42,10 @@
 
     /* Ensure active link text is also white */
     .main-sidebar ul.nav-sidebar>li>.nav-link.active {
-        color: #ffffff;
+        color: #28a745;
+    }
+    .sidebar_img{
+        height: 50%;
+        width: 100%;
     }
 </style>
