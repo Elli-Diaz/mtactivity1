@@ -304,25 +304,6 @@ return [
             'icon' => 'fas fa-fw fa-file',
             'submenu' => [
                 [
-                    'text' => 'User Management',
-                    'url' => 'user',
-                ],
-                [
-                    'text' => 'Asset',
-                    'icon' => 'fas fa-fw fa-box',
-                    'submenu' =>
-                    [
-                        [
-                            'text' => 'Asset Group',
-                            'url' => 'asset_group',
-                        ],
-                        [
-                            'text' => 'Asset Sub Group',
-                            'url' => '',
-                        ],
-                    ],
-                ],
-                [
                     'text' => 'Location',
                     'icon' => 'fas fa-fw fa-map-pin',
                     'submenu' =>
@@ -339,19 +320,7 @@ return [
                             'text' => 'City/Municipality',
                             'url' => 'city',
                         ],
-                        [
-                            'text' => 'Responsibility Center',
-                            'url' => '',
-                        ],
                     ],
-                ],
-                [
-                    'text' => 'Sample',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'Employee',
-                    'url' => '#',
                 ],
                 [
                     'text' => 'Companies',
@@ -368,18 +337,6 @@ return [
                 
             ],
         ],
-
-        [
-            'text' => 'Assignment',
-            'icon' => 'fas fa-fw fa-file-contract',
-            'url' => '#',
-        ],
-        [
-            'text' => 'Assets',
-            'icon' => 'fas fa-fw fa-boxes',
-            'url' => '#',
-        ],
-
         [
             'text' => 'Test Component',
             'icon' => 'fas fa-fw fa-boxes',

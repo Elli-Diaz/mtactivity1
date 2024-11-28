@@ -40,3 +40,13 @@
     </ul>
 
 </nav>
+<style>
+    .main-header.navbar{
+        background-color: #28a745 !important;  
+        color: #fff; 
+    }
+    .navbar-nav .nav-link{
+        color: #fff !important;
+    }
+
+</style>

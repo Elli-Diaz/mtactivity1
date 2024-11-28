@@ -5863,7 +5863,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-loading-overlay */ "./node_modules/vue-loading-overlay/dist/vue-loading.min.js");
+/* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-loading-overlay/dist/vue-loading.css */ "./node_modules/vue-loading-overlay/dist/vue-loading.css");
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    Loading: (vue_loading_overlay__WEBPACK_IMPORTED_MODULE_0___default())
+  },
   props: ["companies"],
   data: function data() {
     return {
@@ -5881,13 +5889,15 @@ __webpack_require__.r(__webpack_exports__);
       departments: [],
       errors: "",
       isEditData: false,
+      isLoading: false,
+      fullPage: true,
       dataTable: [],
       columns: ["id", "department_name", "company_name", "first_name", "last_name", "email", "phone_number", "job_title", "hire_date", "actions"],
       options: {
         headings: {
           id: "ID",
-          department_name: "Department Name",
-          company_name: "Company Name",
+          department_name: "Department",
+          company_name: "Company",
           first_name: "First Name",
           last_name: "Last Name",
           email: "Email",
@@ -5931,6 +5941,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     store: function store() {
       var _this2 = this;
+      this.isLoading = true;
       axios.post("employee/store", {
         department_id: this.department_id,
         company_id: this.company_id,
@@ -5951,6 +5962,8 @@ __webpack_require__.r(__webpack_exports__);
         _this2.closeModal();
       })["catch"](function (error) {
         _this2.errors = error.response.data.errors;
+      })["finally"](function () {
+        _this2.isLoading = false;
       });
     },
     getDepartmentsByCompany: function getDepartmentsByCompany(company_id) {
@@ -5982,6 +5995,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateData: function updateData() {
       var _this5 = this;
+      this.isLoading = true;
       axios.put("/employee/update/" + this.id, {
         department_id: this.department_id,
         company_id: this.company_id,
@@ -6003,6 +6017,8 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         _this5.errors = error.response.data.errors;
         console.log(_this5.errors.name);
+      })["finally"](function () {
+        _this5.isLoading = false;
       });
     },
     destroyData: function destroyData(data) {
@@ -6022,7 +6038,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.show();
-    console.log(this.companies);
   }
 });
 
@@ -7915,7 +7930,18 @@ var render = function render() {
     on: {
       click: _vm.updateData
     }
-  }, [_vm._v("\n                            Update\n                        ")])])])])])], 1)]);
+  }, [_vm._v("\n                            Update\n                        ")])])])])])], 1), _vm._v(" "), _c("div", {
+    staticClass: "vld-parent",
+    staticStyle: {
+      "z-index": "999999 !important"
+    }
+  }, [_c("loading", {
+    attrs: {
+      active: _vm.isLoading,
+      "can-cancel": false,
+      "is-full-page": _vm.fullPage
+    }
+  })], 1)]);
 };
 var staticRenderFns = [function () {
   var _vm = this,

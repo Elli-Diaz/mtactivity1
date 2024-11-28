@@ -69,36 +69,10 @@
                                         {{ company.name }}
                                     </option>
                                 </select>
-                                <p
-                                    class="text-danger"
-                                    v-if="errors.company_id"
-                                >
+                                <p class="text-danger" v-if="errors.company_id">
                                     {{ errors.company_id[0] }}
                                 </p>
                                 <label for="department_id">Department:</label>
-                                <!-- <select
-                                    id="department_id"
-                                    class="form-control"
-                                    v-model="department_id"
-                                    :class="{
-                                        'border border-danger':
-                                            errors.department_id,
-                                    }"
-                                >
-                                    <option
-                                        v-for="department in departments"
-                                        :value="department.id"
-                                    >
-                                        {{ department.name }}
-                                    </option>
-                                </select>
-                                <p
-                                    class="text-danger"
-                                    v-if="errors.department_id"
-                                >
-                                    {{ errors.department_id[0] }}
-                                </p> -->
-
                                 <select
                                     id="department_id"
                                     class="form-control"
@@ -241,10 +215,23 @@
                 </div>
             </div>
         </div>
+        <div class="vld-parent" style="z-index: 999999 !important">
+            <loading
+                :active="isLoading"
+                :can-cancel="false"
+                :is-full-page="fullPage"
+            >
+            </loading>
+        </div>
     </div>
 </template>
 <script>
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
 export default {
+    components: {
+        Loading,
+    },
     props: ["companies"],
     data() {
         return {
@@ -262,6 +249,8 @@ export default {
             departments: [],
             errors: "",
             isEditData: false,
+            isLoading: false,
+            fullPage: true,
             dataTable: [],
             columns: [
                 "id",
@@ -278,8 +267,8 @@ export default {
             options: {
                 headings: {
                     id: "ID",
-                    department_name: "Department Name",
-                    company_name: "Company Name",
+                    department_name: "Department",
+                    company_name: "Company",
                     first_name: "First Name",
                     last_name: "Last Name",
                     email: "Email",
@@ -321,6 +310,7 @@ export default {
             $("#create-employee").modal("hide");
         },
         store() {
+            this.isLoading = true;
             axios
                 .post("employee/store", {
                     department_id: this.department_id,
@@ -344,15 +334,17 @@ export default {
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors;
+                }).finally(() => {
+                    this.isLoading = false;
                 });
         },
         getDepartmentsByCompany(company_id) {
-            console.log(company_id)
+            console.log(company_id);
             axios
                 .get("employee/getDepartmentsByCompany/" + company_id)
                 .then((response) => {
-                    this.departments = response.data.department;   
-             })
+                    this.departments = response.data.department;
+                })
                 .catch((error) => {
                     this.errors.department_id = [
                         "Failed to fetch departments.",
@@ -363,7 +355,7 @@ export default {
         editData(data) {
             this.isEditData = true;
             this.id = data.row.id;
-            console.log(data)
+            console.log(data);
             axios.get("employee/edit/" + this.id).then((response) => {
                 this.company_id = data.row.company_id;
                 this.getDepartmentsByCompany(this.company_id);
@@ -378,10 +370,11 @@ export default {
             $("#create-employee").modal("show");
         },
         updateData() {
+            this.isLoading = true;
             axios
                 .put("/employee/update/" + this.id, {
                     department_id: this.department_id,
-                    company_id: this.company_id, 
+                    company_id: this.company_id,
                     first_name: this.first_name,
                     last_name: this.last_name,
                     email: this.email,
@@ -402,6 +395,8 @@ export default {
                 .catch((error) => {
                     this.errors = error.response.data.errors;
                     console.log(this.errors.name);
+                }).finally(() => {
+                    this.isLoading = false;
                 });
         },
         destroyData(data) {
@@ -420,9 +415,12 @@ export default {
             }
         },
     },
+    
     mounted() {
         this.show();
-        console.log(this.companies);
     },
 };
 </script>
+<style>
+
+</style>

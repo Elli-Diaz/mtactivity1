@@ -21,3 +21,38 @@
     </a>
 
 </li>
+<style>
+    
+    .nav-treeview .nav-link{
+        color: #28a745 !important;
+    }
+
+    .nav-treeview .nav-link:hover{
+        color: #fff !important;
+        background-color: #28a745 !important;
+    }
+
+    .nav-treeview .nav-link.active{
+        color: #fff !important;
+        background-color: #28a745 !important;
+    }
+
+    .nav-link{
+        color: #28a745 !important;
+    }
+
+    .nav-link:hover{
+        color: #fff !important;
+        background-color: #28a745 !important;
+    }
+
+     .nav-link.active{
+        color: #fff !important;
+        background-color: #28a745 !important;
+    }
+
+    hr{
+        width: 90%;
+        height: auto;
+    }
+</style>
