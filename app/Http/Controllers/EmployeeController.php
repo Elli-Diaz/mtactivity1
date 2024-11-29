@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Company;
-use App\Models\Department;
 use App\Models\Employee;
+use App\Models\Department;
+use App\Exports\TestExport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
@@ -38,7 +41,7 @@ class EmployeeController extends Controller
             'first_name' => 'required|string|min:2|max:100',
             'last_name' => 'required|string|min:2|max:100',
             'email' => 'required|email|unique:employees,email',
-            'phone_number' => 'required|unique:employees,phone_number',
+            'phone_number' => 'required|min:2|max:11|unique:employees,phone_number',
             'job_title' => 'required|string|min:2|max:100',
             'hire_date' => 'required|date|before_or_equal:today',
         ], [], [
@@ -61,6 +64,10 @@ class EmployeeController extends Controller
         $data->job_title = $request->job_title;
         $data->hire_date = $request->hire_date;
         $data->save();
+
+        return response()->json([
+            'message' => 'User Successfully Added!'
+        ]);
     }
 
     public function getDepartmentsByCompany($id)
@@ -85,8 +92,8 @@ class EmployeeController extends Controller
             'company_id' => 'required|exists:companies,company_id',
             'first_name' => 'required|string|min:2|max:100',
             'last_name' => 'required|string|min:2|max:100',
-            'email' => 'required|email|unique:employees,email,' .$id,
-            'phone_number' => 'required|unique:employees,phone_number,' .$id,
+            'email' => 'required|email|unique:employees,email,' . $id,
+            'phone_number' => 'required|unique:employees,phone_number,' . $id,
             'job_title' => 'required|string|min:2|max:100',
             'hire_date' => 'required|date|before_or_equal:today',
         ], [], [
@@ -123,5 +130,33 @@ class EmployeeController extends Controller
         return response()->json([
             'message' => 'User Successfully Deleted'
         ]);
+    }
+
+    public function export_excel()
+    {
+        $employees = Employee::all();
+
+        foreach ($employees as $employee) {
+            $object = [
+                'ID' => $employee->id,
+                'Department' => $employee->department_id,
+                'Company' => $employee->company_id,
+                'First Name' => $employee->first_name,
+                'Last Name' => $employee->last_name,
+                'Email' => $employee->email,
+                'Phone Number' => $employee->phone_number,
+                'Job Title' => $employee->job_title,
+                'Hired Date' => $employee->hire_date,
+            ];
+            $data[] = $object;
+        }
+        // dd($data);
+        $currDateTime = Carbon::now()->format('Y-m-d H:i:s');
+        return Excel::download(new TestExport($data), 'UserDataReport' . '_' . $currDateTime . '.xlsx');
+    }
+    public function print()
+    {
+        $employees = Employee::all();
+        return view('admin.masterdata.user_report', compact('employees'));
     }
 }

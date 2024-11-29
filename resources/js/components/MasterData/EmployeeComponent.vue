@@ -20,6 +20,15 @@
                         + Create New User
                     </button>
                 </div>
+                <div class="col-md-12 mb-2">
+                    <button class="btn btn-dark" v-on:click="print">
+                        Export
+                    </button>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <input type="checkbox" v-model="isExportExcel" />
+                    <label for="isExportExcel">Export to Excel:</label>
+                </div>
             </div>
             <v-client-table
                 :data="dataTable"
@@ -53,140 +62,198 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="company_id">Company:</label>
-                                <select
-                                    id="company_id"
-                                    class="form-control"
-                                    v-model="company_id"
-                                    v-on:change="
-                                        getDepartmentsByCompany(company_id)
-                                    "
-                                >
-                                    <option
-                                        v-for="company in companies"
-                                        :value="company.company_id"
-                                    >
-                                        {{ company.name }}
-                                    </option>
-                                </select>
-                                <p class="text-danger" v-if="errors.company_id">
-                                    {{ errors.company_id[0] }}
-                                </p>
-                                <label for="department_id">Department:</label>
-                                <select
-                                    id="department_id"
-                                    class="form-control"
-                                    v-model="department_id"
-                                    :class="{
-                                        'border border-danger':
-                                            errors.department_id,
-                                    }"
-                                >
-                                    <option
-                                        v-for="department in departments"
-                                        :value="department.department_id"
-                                    >
-                                        {{ department.name }}
-                                    </option>
-                                </select>
-                                <p
-                                    class="text-danger"
-                                    v-if="errors.department_id"
-                                >
-                                    {{ errors.department_id[0] }}
-                                </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="company_id">Company:</label>
+                                        <select
+                                            id="company_id"
+                                            class="form-control"
+                                            v-model="company_id"
+                                            :class="{
+                                                'border border-danger':
+                                                    errors.company_id,
+                                            }"
+                                            v-on:change="
+                                                getDepartmentsByCompany(
+                                                    company_id
+                                                )
+                                            "
+                                        >
+                                            <option
+                                                v-for="company in companies"
+                                                :value="company.company_id"
+                                            >
+                                                {{ company.name }}
+                                            </option>
+                                        </select>
+                                        <p
+                                            class="text-danger"
+                                            v-if="errors.company_id"
+                                        >
+                                            {{ errors.company_id[0] }}
+                                        </p>
+                                    </div>
 
-                                <label for="first_name">First Name:</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    v-model="first_name"
-                                    placeholder="Input User First Name here"
-                                    :class="{
-                                        'border border-danger':
-                                            errors.first_name,
-                                    }"
-                                />
-                                <p class="text-danger" v-if="errors.first_name">
-                                    {{ errors.first_name[0] }}
-                                </p>
+                                    <div class="col-md-6">
+                                        <label for="department_id"
+                                            >Department:</label
+                                        >
+                                        <select
+                                            id="department_id"
+                                            class="form-control"
+                                            v-model="department_id"
+                                            :class="{
+                                                'border border-danger':
+                                                    errors.department_id,
+                                            }"
+                                        >
+                                            <option
+                                                v-for="department in departments"
+                                                :value="
+                                                    department.department_id
+                                                "
+                                            >
+                                                {{ department.name }}
+                                            </option>
+                                        </select>
+                                        <p
+                                            class="text-danger"
+                                            v-if="errors.department_id"
+                                        >
+                                            {{ errors.department_id[0] }}
+                                        </p>
+                                    </div>
 
-                                <label for="first_name">Last Name:</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    v-model="last_name"
-                                    placeholder="Input User Last Name here"
-                                    :class="{
-                                        'border border-danger':
-                                            errors.last_name,
-                                    }"
-                                />
-                                <p class="text-danger" v-if="errors.last_name">
-                                    {{ errors.last_name[0] }}
-                                </p>
+                                    <div class="col-md-6">
+                                        <label for="first_name"
+                                            >First Name:</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            v-model="first_name"
+                                            placeholder="Input First Name here"
+                                            :class="{
+                                                'border border-danger':
+                                                    errors.first_name,
+                                            }"
+                                        />
+                                        <p
+                                            class="text-danger"
+                                            v-if="errors.first_name"
+                                        >
+                                            {{ errors.first_name[0] }}
+                                        </p>
+                                    </div>
 
-                                <label for="email">Email:</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    v-model="email"
-                                    placeholder="Input User's Email here"
-                                    :class="{
-                                        'border border-danger': errors.email,
-                                    }"
-                                />
-                                <p class="text-danger" v-if="errors.email">
-                                    {{ errors.email[0] }}
-                                </p>
+                                    <div class="col-md-6">
+                                        <label for="first_name"
+                                            >Last Name:</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            v-model="last_name"
+                                            placeholder="Input Last Name here"
+                                            :class="{
+                                                'border border-danger':
+                                                    errors.last_name,
+                                            }"
+                                        />
+                                        <p
+                                            class="text-danger"
+                                            v-if="errors.last_name"
+                                        >
+                                            {{ errors.last_name[0] }}
+                                        </p>
+                                    </div>
 
-                                <label for="phone_number">Phone Number:</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    v-model="phone_number"
-                                    placeholder="Input User's Phone Number here"
-                                    :class="{
-                                        'border border-danger':
-                                            errors.phone_number,
-                                    }"
-                                />
-                                <p
-                                    class="text-danger"
-                                    v-if="errors.phone_number"
-                                >
-                                    {{ errors.phone_number[0] }}
-                                </p>
+                                    <div class="col-md-6">
+                                        <label for="email">Email:</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            v-model="email"
+                                            placeholder="Input Email here"
+                                            :class="{
+                                                'border border-danger':
+                                                    errors.email,
+                                            }"
+                                        />
+                                        <p
+                                            class="text-danger"
+                                            v-if="errors.email"
+                                        >
+                                            {{ errors.email[0] }}
+                                        </p>
+                                    </div>
 
-                                <label for="job_title">Job Title:</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    v-model="job_title"
-                                    placeholder="Input User's Job Title here"
-                                    :class="{
-                                        'border border-danger':
-                                            errors.job_title,
-                                    }"
-                                />
-                                <p class="text-danger" v-if="errors.job_title">
-                                    {{ errors.job_title[0] }}
-                                </p>
+                                    <div class="col-md-6">
+                                        <label for="phone_number"
+                                            >Phone Number:</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            v-model="phone_number"
+                                            placeholder="Input Phone Number here"
+                                            :class="{
+                                                'border border-danger':
+                                                    errors.phone_number,
+                                            }"
+                                        />
+                                        <p
+                                            class="text-danger"
+                                            v-if="errors.phone_number"
+                                        >
+                                            {{ errors.phone_number[0] }}
+                                        </p>
+                                    </div>
 
-                                <label for="hire_date">Hired Date:</label>
-                                <input
-                                    type="date"
-                                    class="form-control"
-                                    v-model="hire_date"
-                                    placeholder="Input User's Hired Date here"
-                                    :class="{
-                                        'border border-danger':
-                                            errors.hire_date,
-                                    }"
-                                />
-                                <p class="text-danger" v-if="errors.hire_date">
-                                    {{ errors.hire_date[0] }}
-                                </p>
+                                    <div class="col-md-6">
+                                        <label for="job_title"
+                                            >Job Title:</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            v-model="job_title"
+                                            placeholder="Input Job Title here"
+                                            :class="{
+                                                'border border-danger':
+                                                    errors.job_title,
+                                            }"
+                                        />
+                                        <p
+                                            class="text-danger"
+                                            v-if="errors.job_title"
+                                        >
+                                            {{ errors.job_title[0] }}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="hire_date"
+                                            >Hired Date:</label
+                                        >
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            v-model="hire_date"
+                                            placeholder="Input Hired Date here"
+                                            :class="{
+                                                'border border-danger':
+                                                    errors.hire_date,
+                                            }"
+                                        />
+                                        <p
+                                            class="text-danger"
+                                            v-if="errors.hire_date"
+                                        >
+                                            {{ errors.hire_date[0] }}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -251,6 +318,7 @@ export default {
             isEditData: false,
             isLoading: false,
             fullPage: true,
+            isExportExcel: false,
             dataTable: [],
             columns: [
                 "id",
@@ -334,7 +402,8 @@ export default {
                 })
                 .catch((error) => {
                     this.errors = error.response.data.errors;
-                }).finally(() => {
+                })
+                .finally(() => {
                     this.isLoading = false;
                 });
         },
@@ -395,7 +464,8 @@ export default {
                 .catch((error) => {
                     this.errors = error.response.data.errors;
                     console.log(this.errors.name);
-                }).finally(() => {
+                })
+                .finally(() => {
                     this.isLoading = false;
                 });
         },
@@ -414,13 +484,21 @@ export default {
                     });
             }
         },
+
+        print() {
+            if (this.isExportExcel == true) {
+                window.open("employee/export_excel");
+            } else {
+                window.open("employee/print");
+            }
+            // axios.post("employee/print").then((response) => {
+            //     this.dataTable = response.data.data;
+            // });
+        },
     },
-    
+
     mounted() {
         this.show();
     },
 };
 </script>
-<style>
-
-</style>

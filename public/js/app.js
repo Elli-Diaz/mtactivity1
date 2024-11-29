@@ -5891,6 +5891,7 @@ __webpack_require__.r(__webpack_exports__);
       isEditData: false,
       isLoading: false,
       fullPage: true,
+      isExportExcel: false,
       dataTable: [],
       columns: ["id", "department_name", "company_name", "first_name", "last_name", "email", "phone_number", "job_title", "hire_date", "actions"],
       options: {
@@ -6034,6 +6035,16 @@ __webpack_require__.r(__webpack_exports__);
           _this6.show();
         });
       }
+    },
+    print: function print() {
+      if (this.isExportExcel == true) {
+        window.open("employee/export_excel");
+      } else {
+        window.open("employee/print");
+      }
+      // axios.post("employee/print").then((response) => {
+      //     this.dataTable = response.data.data;
+      // });
     }
   },
   mounted: function mounted() {
@@ -7615,7 +7626,51 @@ var render = function render() {
     on: {
       click: _vm.showModal
     }
-  }, [_vm._v("\n                    + Create New User\n                ")])])]), _vm._v(" "), _c("v-client-table", {
+  }, [_vm._v("\n                    + Create New User\n                ")])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-12 mb-2"
+  }, [_c("button", {
+    staticClass: "btn btn-dark",
+    on: {
+      click: _vm.print
+    }
+  }, [_vm._v("\n                    Export\n                ")])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-12 mb-2"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.isExportExcel,
+      expression: "isExportExcel"
+    }],
+    attrs: {
+      type: "checkbox"
+    },
+    domProps: {
+      checked: Array.isArray(_vm.isExportExcel) ? _vm._i(_vm.isExportExcel, null) > -1 : _vm.isExportExcel
+    },
+    on: {
+      change: function change($event) {
+        var $$a = _vm.isExportExcel,
+          $$el = $event.target,
+          $$c = $$el.checked ? true : false;
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.isExportExcel = $$a.concat([$$v]));
+          } else {
+            $$i > -1 && (_vm.isExportExcel = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+          }
+        } else {
+          _vm.isExportExcel = $$c;
+        }
+      }
+    }
+  }), _vm._v(" "), _c("label", {
+    attrs: {
+      "for": "isExportExcel"
+    }
+  }, [_vm._v("Export to Excel:")])])]), _vm._v(" "), _c("v-client-table", {
     attrs: {
       data: _vm.dataTable,
       columns: _vm.columns,
@@ -7660,6 +7715,10 @@ var render = function render() {
     staticClass: "modal-body"
   }, [_c("div", {
     staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-md-6"
   }, [_c("label", {
     attrs: {
       "for": "company_id"
@@ -7672,6 +7731,9 @@ var render = function render() {
       expression: "company_id"
     }],
     staticClass: "form-control",
+    "class": {
+      "border border-danger": _vm.errors.company_id
+    },
     attrs: {
       id: "company_id"
     },
@@ -7693,10 +7755,12 @@ var render = function render() {
       domProps: {
         value: company.company_id
       }
-    }, [_vm._v("\n                                    " + _vm._s(company.name) + "\n                                ")]);
+    }, [_vm._v("\n                                            " + _vm._s(company.name) + "\n                                        ")]);
   }), 0), _vm._v(" "), _vm.errors.company_id ? _c("p", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                " + _vm._s(_vm.errors.company_id[0]) + "\n                            ")]) : _vm._e(), _vm._v(" "), _c("label", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.company_id[0]) + "\n                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("label", {
     attrs: {
       "for": "department_id"
     }
@@ -7730,10 +7794,12 @@ var render = function render() {
       domProps: {
         value: department.department_id
       }
-    }, [_vm._v("\n                                    " + _vm._s(department.name) + "\n                                ")]);
+    }, [_vm._v("\n                                            " + _vm._s(department.name) + "\n                                        ")]);
   }), 0), _vm._v(" "), _vm.errors.department_id ? _c("p", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                " + _vm._s(_vm.errors.department_id[0]) + "\n                            ")]) : _vm._e(), _vm._v(" "), _c("label", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.department_id[0]) + "\n                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("label", {
     attrs: {
       "for": "first_name"
     }
@@ -7750,7 +7816,7 @@ var render = function render() {
     },
     attrs: {
       type: "text",
-      placeholder: "Input User First Name here"
+      placeholder: "Input First Name here"
     },
     domProps: {
       value: _vm.first_name
@@ -7763,7 +7829,9 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.errors.first_name ? _c("p", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                " + _vm._s(_vm.errors.first_name[0]) + "\n                            ")]) : _vm._e(), _vm._v(" "), _c("label", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.first_name[0]) + "\n                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("label", {
     attrs: {
       "for": "first_name"
     }
@@ -7780,7 +7848,7 @@ var render = function render() {
     },
     attrs: {
       type: "text",
-      placeholder: "Input User Last Name here"
+      placeholder: "Input Last Name here"
     },
     domProps: {
       value: _vm.last_name
@@ -7793,7 +7861,9 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.errors.last_name ? _c("p", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                " + _vm._s(_vm.errors.last_name[0]) + "\n                            ")]) : _vm._e(), _vm._v(" "), _c("label", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.last_name[0]) + "\n                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("label", {
     attrs: {
       "for": "email"
     }
@@ -7810,7 +7880,7 @@ var render = function render() {
     },
     attrs: {
       type: "text",
-      placeholder: "Input User's Email here"
+      placeholder: "Input Email here"
     },
     domProps: {
       value: _vm.email
@@ -7823,7 +7893,9 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.errors.email ? _c("p", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                " + _vm._s(_vm.errors.email[0]) + "\n                            ")]) : _vm._e(), _vm._v(" "), _c("label", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.email[0]) + "\n                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("label", {
     attrs: {
       "for": "phone_number"
     }
@@ -7840,7 +7912,7 @@ var render = function render() {
     },
     attrs: {
       type: "text",
-      placeholder: "Input User's Phone Number here"
+      placeholder: "Input Phone Number here"
     },
     domProps: {
       value: _vm.phone_number
@@ -7853,7 +7925,9 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.errors.phone_number ? _c("p", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                " + _vm._s(_vm.errors.phone_number[0]) + "\n                            ")]) : _vm._e(), _vm._v(" "), _c("label", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.phone_number[0]) + "\n                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("label", {
     attrs: {
       "for": "job_title"
     }
@@ -7870,7 +7944,7 @@ var render = function render() {
     },
     attrs: {
       type: "text",
-      placeholder: "Input User's Job Title here"
+      placeholder: "Input Job Title here"
     },
     domProps: {
       value: _vm.job_title
@@ -7883,7 +7957,9 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.errors.job_title ? _c("p", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                " + _vm._s(_vm.errors.job_title[0]) + "\n                            ")]) : _vm._e(), _vm._v(" "), _c("label", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.job_title[0]) + "\n                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("label", {
     attrs: {
       "for": "hire_date"
     }
@@ -7900,7 +7976,7 @@ var render = function render() {
     },
     attrs: {
       type: "date",
-      placeholder: "Input User's Hired Date here"
+      placeholder: "Input Hired Date here"
     },
     domProps: {
       value: _vm.hire_date
@@ -7913,7 +7989,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.errors.hire_date ? _c("p", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                " + _vm._s(_vm.errors.hire_date[0]) + "\n                            ")]) : _vm._e()])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.hire_date[0]) + "\n                                    ")]) : _vm._e()])])])]), _vm._v(" "), _c("div", {
     staticClass: "modal-footer"
   }, [_c("button", {
     staticClass: "btn btn-outline-danger",
