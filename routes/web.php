@@ -113,6 +113,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('update/{id}', [EmployeeController::class, 'update']);
         Route::get('destroy/{id}', [EmployeeController::class, 'destroy']);
         Route::get('getDepartmentsByCompany/{id}', [EmployeeController::class, 'getDepartmentsByCompany']);
+        Route::get('/export_excel', [EmployeeController::class, 'export_excel']);
+        Route::get('/print', [EmployeeController::class, 'print']);
+
     });
 
 });
